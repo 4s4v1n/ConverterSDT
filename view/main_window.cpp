@@ -1,5 +1,9 @@
-#include "main_window.h"
-#include "./ui_main_window.h"
+#include "main_window.hpp"
+#include "ui_main_window.h"
+
+#include "../controller/controller.hpp"
+
+#include <iostream>
 
 namespace dvt
 {
@@ -71,7 +75,22 @@ auto MainWindow::onClearEntryButtonClicked() noexcept -> void
 
 auto MainWindow::onConvertButtonClicked() noexcept -> void
 {
-    // TODO here call to controller
+    auto& input {ui->input_line};
+    auto& output{ui->output_line};
+    auto  input_degree {ui->input_degree_spinbox->value()};
+    auto  output_degree{ui->output_degree_spinbox->value()};
+
+    std::string result {};
+    try
+    {
+        result = m_controller->convert(input->text().toStdString(), input_degree, output_degree);
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what();
+        return;
+    }
+    output->setText(QString::fromStdString(result));
 }
 
 } // namespace dvt

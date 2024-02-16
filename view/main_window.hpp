@@ -6,12 +6,15 @@
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
+
 class MainWindow;
+
 }
 QT_END_NAMESPACE
 
 namespace dvt
 {
+
 class Controller;
 
 // singleton
@@ -33,7 +36,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
 
-    Controller*     m_controller;
+    Controller* m_controller;
 };
 
 } // namespace dvt

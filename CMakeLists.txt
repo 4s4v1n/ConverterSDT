@@ -14,9 +14,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        main_window.cpp
-        main_window.h
-        main_window.ui
+        view/main_window.cpp
+        view/main_window.hpp
+        view/main_window.ui
+        model/converter_decimal_to_p.cpp
+        model/converter_decimal_to_p.hpp
+        model/converter_p_to_decimal.cpp
+        model/converter_p_to_decimal.hpp
+        controller/controller.cpp
+        controller/controller.hpp
 )
 
 qt_add_executable(Converter
