@@ -9,8 +9,16 @@ namespace dvt
 
 auto ConverterP2Decimal::p_to_float(const std::string& value, const int p) -> double
 {
-    // TODO
-    return 0.;
+    auto dot_position{static_cast<int>(value.find('.'))};
+    auto integer_part {p_to_int(value.substr(0, dot_position), p)};
+    auto fractional_part{0.};
+
+    auto degree {-1};
+    for (auto it {value.begin() + dot_position + 1}; it != value.end(); ++it, --degree)
+    {
+        fractional_part += char_to_int(*it) * std::pow(p, degree);
+    }
+    return value.front() == '-' ? integer_part - fractional_part : integer_part + fractional_part;
 }
 
 auto ConverterP2Decimal::p_to_int(const std::string& value, const int p) -> int
