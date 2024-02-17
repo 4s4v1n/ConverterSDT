@@ -34,9 +34,8 @@ private slots:
     auto onConvertButtonClicked() noexcept -> void;
 
 private:
-    Ui::MainWindow* ui;
-
-    Controller* m_controller;
+    Ui::MainWindow* ui           {};
+    Controller*     m_controller {};
 };
 
 } // namespace dvt

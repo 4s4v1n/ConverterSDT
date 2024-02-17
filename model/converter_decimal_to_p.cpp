@@ -6,7 +6,7 @@
 
 namespace dvt
 {
-auto ConverterDecimal2P::float_to_p(double value, int notation, int accuracy) -> std::string
+auto ConverterDecimal2P::float_to_p(double value, const int notation, const int accuracy) -> std::string
 {
     if (notation < 2 || notation > 16)
     {
@@ -18,11 +18,18 @@ auto ConverterDecimal2P::float_to_p(double value, int notation, int accuracy) ->
     return "";
 }
 
-auto ConverterDecimal2P::int_to_p(int value, int notation) -> std::string
+auto ConverterDecimal2P::int_to_p(int value, const int notation) -> std::string
 {
     if (notation < 2 || notation > 16)
     {
         throw std::invalid_argument{std::format("got invalid number notation {}", notation)};
+    }
+
+    auto is_negative {false};
+    if (value < 0)
+    {
+        is_negative = true;
+        value *= -1;
     }
 
     std::list<int> remainder_list {};
@@ -32,11 +39,12 @@ auto ConverterDecimal2P::int_to_p(int value, int notation) -> std::string
         value /= notation;
     }
 
-    std::string result {};
+    std::string result {is_negative ? "-" : ""};
     for (const auto& reminder : remainder_list)
     {
         result.push_back(int_to_char(reminder));
     }
+
     return result;
 }
 
@@ -47,7 +55,7 @@ auto ConverterDecimal2P::int_to_char(const int value) -> char
         throw std::invalid_argument{std::format("got invalid value {}", value)};
     }
 
-    if (value >= 0 && value <= 9)
+    if (value <= 9)
     {
         return static_cast<char>(value + 48);
     }

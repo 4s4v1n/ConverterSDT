@@ -18,11 +18,11 @@ auto ConverterP2Decimal::p_to_int(const std::string& value, const int p) -> int
     auto result {0};
     auto degree {0};
 
-    for (auto it {value.rbegin()}; it != value.rend(); ++it, ++degree)
+    for (auto it {value.rbegin()}; it != value.rend() && *it != '-'; ++it, ++degree)
     {
         result += char_to_int(*it) * static_cast<int>(std::pow(p, degree));
     }
-    return result;
+    return value.starts_with('-') ? result * -1 : result;
 }
 
 auto ConverterP2Decimal::char_to_int(const char symbol) -> int
