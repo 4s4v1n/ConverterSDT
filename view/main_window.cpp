@@ -10,7 +10,8 @@ namespace dvt
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow{parent},
     ui{new Ui::MainWindow},
-    m_controller{}
+    m_controller{new Controller},
+    m_error{}
 {
     ui->setupUi(this);
 
@@ -84,6 +85,15 @@ auto MainWindow::onConvertButtonClicked() noexcept -> void
     std::string result {};
     try
     {
+        if (!m_controller->validate(input->text().toStdString(), input_degree))
+        {
+            m_error = std::make_unique<QErrorMessage>(new QErrorMessage{this});
+
+            m_error->setWindowModality(Qt::WindowModality::WindowModal);
+            m_error->showMessage("expression isn't valid");
+
+            return;
+        }
         result = m_controller->convert(input->text().toStdString(), input_degree, output_degree);
     }
     catch (const std::exception& ex)

@@ -8,7 +8,7 @@
 
 namespace dvt
 {
-auto ConverterDecimal2P::float_to_p(double value, const int notation, const int accuracy) -> std::string
+auto ConverterDecimal2P::floatToP(double value, const int notation, const int accuracy) -> std::string
 {
     if (notation < 2 || notation > 16)
     {
@@ -18,11 +18,15 @@ auto ConverterDecimal2P::float_to_p(double value, const int notation, const int 
     auto integer_part{0.};
     auto fractional_part    {std::modf(value, &integer_part)};
 
-    std::string integer_str    {int_to_p(static_cast<int>(integer_part), notation)};
+    std::string integer_str    {intToP(static_cast<int>(integer_part), notation)};
     std::string fractional_str {};
 
     if (fractional_part < 0)
     {
+        if (integer_str == "0")
+        {
+            integer_str.insert(0, "-");
+        }
         fractional_part *= -1;
     }
 
@@ -32,7 +36,7 @@ auto ConverterDecimal2P::float_to_p(double value, const int notation, const int 
         fractional_part *= notation;
         fractional_part = std::modf(fractional_part, &integer_part);
 
-        fractional_str.push_back(int_to_char(static_cast<int>(integer_part)));
+        fractional_str.push_back(intToChar(static_cast<int>(integer_part)));
 
         ++current_accuracy;
     }
@@ -42,10 +46,14 @@ auto ConverterDecimal2P::float_to_p(double value, const int notation, const int 
         fractional_str.pop_back();
     }
 
-    return integer_str + "." + fractional_str;
+    if (fractional_str.empty())
+    {
+        return integer_str;
+    }
+    return (integer_str + "." + fractional_str);
 }
 
-auto ConverterDecimal2P::int_to_p(int value, const int notation) -> std::string
+auto ConverterDecimal2P::intToP(int value, const int notation) -> std::string
 {
     if (notation < 2 || notation > 16)
     {
@@ -60,22 +68,22 @@ auto ConverterDecimal2P::int_to_p(int value, const int notation) -> std::string
     }
 
     std::list<int> remainder_list {};
-    while (value != 0)
+    do
     {
         remainder_list.push_front(value % notation);
         value /= notation;
     }
+    while (value != 0);
 
     std::string result {is_negative ? "-" : ""};
     for (const auto& reminder : remainder_list)
     {
-        result.push_back(int_to_char(reminder));
+        result.push_back(intToChar(reminder));
     }
-
     return result;
 }
 
-auto ConverterDecimal2P::int_to_char(const int value) -> char
+auto ConverterDecimal2P::intToChar(const int value) -> char
 {
     if (value < 0 || value > 16)
     {

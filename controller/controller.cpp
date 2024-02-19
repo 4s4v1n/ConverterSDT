@@ -6,11 +6,21 @@
 namespace dvt
 {
 
-auto Controller::convert(const std::string& value, const int input_degree, const int output_degree) -> std::string
+auto Controller::convert(const std::string& value, const int input_base, const int output_base) -> std::string
 {
-    auto input {ConverterP2Decimal::p_to_float(value, input_degree)};
-    return ConverterDecimal2P::float_to_p(input, output_degree, 20); // TODO fix accuracy
+    if (value.find('.') != std::string::npos)
+    {
+        auto input {ConverterP2Decimal::pToFloat(value, input_base)};
+        return ConverterDecimal2P::floatToP(input, output_base,
+                                             ConverterP2Decimal::evaluatePrecision(value));
+    }
+    auto input {ConverterP2Decimal::pToInt(value, input_base)};
+    return ConverterDecimal2P::intToP(input, output_base);
+}
+
+auto Controller::validate(const std::string& value, int base) -> bool
+{
+    return ConverterP2Decimal::isValidExpression(value, base);
 }
 
 }
-

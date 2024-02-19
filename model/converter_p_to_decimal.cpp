@@ -7,33 +7,33 @@
 namespace dvt
 {
 
-auto ConverterP2Decimal::p_to_float(const std::string& value, const int p) -> double
+auto ConverterP2Decimal::pToFloat(const std::string& value, int p) -> double
 {
     auto dot_position{static_cast<int>(value.find('.'))};
-    auto integer_part {p_to_int(value.substr(0, dot_position), p)};
+    auto integer_part {pToInt(value.substr(0, dot_position), p)};
     auto fractional_part{0.};
 
     auto degree {-1};
     for (auto it {value.begin() + dot_position + 1}; it != value.end(); ++it, --degree)
     {
-        fractional_part += char_to_int(*it) * std::pow(p, degree);
+        fractional_part += charToInt(*it) * std::pow(p, degree);
     }
     return value.front() == '-' ? integer_part - fractional_part : integer_part + fractional_part;
 }
 
-auto ConverterP2Decimal::p_to_int(const std::string& value, const int p) -> int
+auto ConverterP2Decimal::pToInt(const std::string& value, int p) -> int
 {
     auto result {0};
     auto degree {0};
 
     for (auto it {value.rbegin()}; it != value.rend() && *it != '-'; ++it, ++degree)
     {
-        result += char_to_int(*it) * static_cast<int>(std::pow(p, degree));
+        result += charToInt(*it) * static_cast<int>(std::pow(p, degree));
     }
     return value.starts_with('-') ? result * -1 : result;
 }
 
-auto ConverterP2Decimal::char_to_int(const char symbol) -> int
+auto ConverterP2Decimal::charToInt(const char symbol) -> int
 {
     if (symbol >= '0' && symbol <= '9')
     {
@@ -49,6 +49,63 @@ auto ConverterP2Decimal::char_to_int(const char symbol) -> int
     }
 
     throw std::invalid_argument{std::format("got invalid symbol {}", symbol)};
+}
+
+auto ConverterP2Decimal::evaluatePrecision(const std::string &value) -> int
+{
+    auto dot_position {value.find('.')};
+    return static_cast<int>(value.size() - dot_position);
+}
+
+auto ConverterP2Decimal::evaluateLetters(const int base) -> std::pair<char, char>
+{
+    if (base < 11 || base > 16)
+    {
+        throw std::invalid_argument{std::format("got invalid base {}", base)};
+    }
+    return std::make_pair(static_cast<char>(base + 54), static_cast<char>(base + 86));
+}
+
+auto ConverterP2Decimal::evaluateFloatRegex(const int base) -> std::regex
+{
+    if (base < 2 || base > 16)
+    {
+        throw std::invalid_argument{std::format("got invalid base {}", base)};
+    }
+
+    if (base <= 10)
+    {
+        return std::regex{std::format(R"(^\-?[0-{}]+\.[0-{}]+$)", base - 1, base - 1)};
+    }
+
+    auto [upper, lower] {evaluateLetters(base)};
+    return std::regex{std::format(R"(^\-?([0-9]|[A-{}]|[a-{}])+\.([0-9]|[A-{}]|[a-{}])+$)",
+                                  upper, lower, upper, lower)};
+}
+
+auto ConverterP2Decimal::evaluateIntRegex(const int base) -> std::regex
+{
+    if (base < 2 || base > 16)
+    {
+        throw std::invalid_argument{std::format("got invalid base {}", base)};
+    }
+
+    if (base <= 10)
+    {
+        return std::regex{std::format(R"(^\-?[0-{}]+$)", base - 1, base - 1)};
+    }
+
+    auto [upper, lower] {evaluateLetters(base)};
+    return std::regex{std::format(R"(^\-?([0-9]|[A-{}]|[a-{}]))", upper, lower)};
+}
+
+auto ConverterP2Decimal::isValidExpression(const std::string &value, const int base) -> bool
+{
+    if (value.find('.') != std::string::npos)
+    {
+        return std::regex_match(value, evaluateFloatRegex(base));
+    }
+    return std::regex_match(value, evaluateIntRegex(base));
 }
 
 } // dvt

@@ -14,11 +14,11 @@ public:
     ~ConverterDecimal2P() = delete;
 
 public:
-    static auto float_to_p(double value, int notation, int accuracy) -> std::string;
-    static auto int_to_p(int value, int notation) -> std::string;
+    static auto floatToP(double value, int notation, int accuracy) -> std::string;
+    static auto intToP(int value, int notation) -> std::string;
 
 private:
-    static auto int_to_char(int value) -> char;
+    static auto intToChar(int value) -> char;
 };
 
 } // dvt

@@ -1,7 +1,10 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include <QErrorMessage>
 #include <QMainWindow>
+
+#include "../controller/controller.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -14,8 +17,6 @@ QT_END_NAMESPACE
 
 namespace dvt
 {
-
-class Controller;
 
 // singleton
 class MainWindow : public QMainWindow
@@ -34,8 +35,10 @@ private slots:
     auto onConvertButtonClicked() noexcept -> void;
 
 private:
-    Ui::MainWindow* ui           {};
-    Controller*     m_controller {};
+    Ui::MainWindow* ui {};
+
+    std::unique_ptr<Controller>    m_controller {};
+    std::unique_ptr<QErrorMessage> m_error      {};
 };
 
 } // namespace dvt

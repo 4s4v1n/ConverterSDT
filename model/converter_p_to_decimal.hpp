@@ -1,6 +1,7 @@
 #ifndef CONVERTER_P_TO_DECIMAL_HPP
 #define CONVERTER_P_TO_DECIMAL_HPP
 
+#include <regex>
 #include <string>
 
 namespace dvt
@@ -13,11 +14,16 @@ public:
     ~ConverterP2Decimal() = delete;
 
 public:
-    static auto p_to_float(const std::string& value, int p) -> double;
-    static auto p_to_int(const std::string& value, int p) -> int;
+    static auto pToFloat(const std::string& value, int p) -> double;
+    static auto pToInt(const std::string& value, int p) -> int;
+    static auto evaluatePrecision(const std::string& value) -> int;
+    static auto isValidExpression(const std::string& value, int base) -> bool;
 
 private:
-    static auto char_to_int(char symbol) -> int;
+    static auto charToInt(char symbol) -> int;
+    static auto evaluateFloatRegex(int base) -> std::regex;
+    static auto evaluateIntRegex(int base) -> std::regex;
+    static auto evaluateLetters(int base) -> std::pair<char, char>;
 };
 
 } // dvt

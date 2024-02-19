@@ -13,7 +13,8 @@ public:
     ~Controller() = default;
 
 public:
-    auto convert(const std::string &value, int input_degree, int output_degree) -> std::string;
+    auto convert(const std::string& value, int input_base, int output_base) -> std::string;
+    auto validate(const std::string& value, int base) -> bool;
 };
 
 } // namespace dvt
