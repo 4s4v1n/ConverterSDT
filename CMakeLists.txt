@@ -23,6 +23,10 @@ set(PROJECT_SOURCES
         model/converter_p_to_decimal.hpp
         controller/controller.cpp
         controller/controller.hpp
+        model/history.cpp
+        model/history.hpp
+        model/editor.cpp
+        model/editor.hpp
 )
 
 qt_add_executable(Converter
