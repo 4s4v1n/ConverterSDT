@@ -25,8 +25,6 @@ set(PROJECT_SOURCES
         controller/controller.hpp
         model/history.cpp
         model/history.hpp
-        model/editor.cpp
-        model/editor.hpp
 )
 
 qt_add_executable(Converter
