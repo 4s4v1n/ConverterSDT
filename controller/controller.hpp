@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "../model/history.hpp"
+
 namespace dvt
 {
 
@@ -15,6 +17,10 @@ public:
 public:
     auto convert(const std::string& value, int input_base, int output_base) -> std::string;
     auto validate(const std::string& value, int base) -> bool;
+    auto history() const noexcept -> const History&;
+
+private:
+    History m_history {};
 };
 
 } // namespace dvt

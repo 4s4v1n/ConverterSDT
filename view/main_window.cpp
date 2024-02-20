@@ -1,19 +1,16 @@
 #include "main_window.hpp"
 #include "ui_main_window.h"
 
-#include "../controller/controller.hpp"
-
 #include <iostream>
 
-namespace dvt
-{
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow{parent},
     ui{new Ui::MainWindow},
-    m_controller{new Controller},
-    m_error{}
+    m_error{},
+    m_history{new HistoryWindow}
 {
     ui->setupUi(this);
+    m_history->setController(m_controller);
 
     connect(ui->push_button_0, &QPushButton::clicked, this, &MainWindow::onInputButtonClicked);
     connect(ui->push_button_1, &QPushButton::clicked, this, &MainWindow::onInputButtonClicked);
@@ -41,37 +38,21 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->input_base_spinbox, &QSpinBox::valueChanged, ui->input_base_slider, &QSlider::setValue);
     connect(ui->output_base_slider, &QSlider::valueChanged, ui->output_base_spinbox, &QSpinBox::setValue);
     connect(ui->output_base_spinbox, &QSpinBox::valueChanged, ui->output_base_slider, &QSlider::setValue);
+
+    connect(ui->menu, &QMenu::triggered, this, &MainWindow::onMenuTriggered);
 }
 
-auto MainWindow::onInputButtonClicked() noexcept -> void
+MainWindow::~MainWindow()
 {
-    auto button{qobject_cast<QPushButton *>(sender())};
-    if (button == nullptr)
-    {
-        return;
-    }
-
-    auto &input{ui->input_line};
-    if (input->text().isEmpty())
-    {
-        input->setText(button->text());
-    }
-    else
-    {
-        input->setText(input->text() + button->text());
-    }
+    delete ui;
 }
 
-auto MainWindow::onAllClearButtonClicked() noexcept -> void
+auto MainWindow::setController(const std::shared_ptr<dvt::Controller>& controller) noexcept -> void
 {
-    auto &input{ui->input_line};
-    if (!input->text().isEmpty())
-    {
-        input->clear();
-    }
+    m_controller = controller;
 }
 
-auto MainWindow::onClearEntryButtonClicked() noexcept -> void
+auto MainWindow::clearEntry() noexcept -> void
 {
     auto &input{ui->input_line};
     if (!input->text().isEmpty())
@@ -80,7 +61,7 @@ auto MainWindow::onClearEntryButtonClicked() noexcept -> void
     }
 }
 
-auto MainWindow::onConvertButtonClicked() noexcept -> void
+auto MainWindow::convertInput() noexcept -> void
 {
     auto& input {ui->input_line};
     auto& output{ui->output_line};
@@ -109,6 +90,53 @@ auto MainWindow::onConvertButtonClicked() noexcept -> void
     output->setText(QString::fromStdString(result));
 }
 
+auto MainWindow::clearAll() noexcept -> void
+{
+    auto &input{ui->input_line};
+    if (!input->text().isEmpty())
+    {
+        input->clear();
+    }
+}
+
+auto MainWindow::addInput(const QString& text) noexcept -> void
+{
+    auto &input {ui->input_line};
+    if (input->text().isEmpty())
+    {
+        input->setText(text);
+    }
+    else
+    {
+        input->setText(input->text() + text);
+    }
+}
+
+auto MainWindow::onInputButtonClicked() noexcept -> void
+{
+    auto button{qobject_cast<QPushButton *>(sender())};
+    if (button == nullptr)
+    {
+        return;
+    }
+    addInput(button->text());
+}
+
+auto MainWindow::onAllClearButtonClicked() noexcept -> void
+{
+    clearAll();
+}
+
+auto MainWindow::onClearEntryButtonClicked() noexcept -> void
+{
+    clearEntry();
+}
+
+auto MainWindow::onConvertButtonClicked() noexcept -> void
+{
+    convertInput();
+}
+
 auto MainWindow::keyPressEvent(QKeyEvent *event) -> void
 {
     auto& input {ui->input_line};
@@ -116,11 +144,11 @@ auto MainWindow::keyPressEvent(QKeyEvent *event) -> void
 
     if (key == Qt::Key_Backspace)
     {
-        onClearEntryButtonClicked();
+        clearEntry();
     }
     else if (key == Qt::Key_Enter)
     {
-        onConvertButtonClicked();
+        convertInput();
     }
     else
     {
@@ -128,4 +156,24 @@ auto MainWindow::keyPressEvent(QKeyEvent *event) -> void
     }
 }
 
-} // namespace dvt
+auto MainWindow::mousePressEvent(QMouseEvent *event) -> void
+{
+   setFocus();
+}
+
+auto MainWindow::onMenuTriggered(QAction* action) noexcept -> void
+{
+    auto action_name {action->objectName()};
+    if (action_name == exit_action_name)
+    {
+        QApplication::exit();
+    }
+    else if (action_name == reference_action_name)
+    {
+
+    }
+    else if (action_name == history_action_name)
+    {
+        m_history->show();
+    }
+}

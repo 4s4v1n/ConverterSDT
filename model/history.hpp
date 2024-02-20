@@ -4,32 +4,51 @@
 #include <string>
 #include <vector>
 
+#include <QAbstractListModel>
+#include <QList>
+
 namespace dvt {
 
-class History
+class History : public QAbstractListModel
 {
+    Q_OBJECT
+
 public:
     struct Record
     {
         Record()  = default;
         ~Record() = default;
 
-        int         output_base {};
+        Record(int input_base, int output_base,
+               const std::string& input, const std::string& output);
+
         int         input_base  {};
+        int         output_base {};
         std::string input       {};
         std::string output      {};
     };
 
-public:
-    [[nodiscard]] auto operator[](int index) const -> Record;
+    enum RoleNames
+    {
+        InputBaseRole = Qt::UserRole + 1,
+        OutputBaseRole,
+        InputRole,
+        OutputRole
+    };
 
 public:
-    [[nodiscard]] auto count() const noexcept -> int;
+    explicit History(QObject* parent = nullptr);
+
+public:
+    auto rowCount(const QModelIndex& index) const -> int override;
+    auto data(const QModelIndex& index, int role) const -> QVariant override;
+    auto roleNames() const -> QHash<int, QByteArray> override;
+
+public:
     auto add(const Record& record) noexcept -> void;
-    auto clear() noexcept -> void;
 
 private:
-    std::vector<Record> m_data {};
+    QList<Record> m_data {};
 };
 
 } // dvt
