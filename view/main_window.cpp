@@ -36,6 +36,11 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->push_button_ac, &QPushButton::clicked, this, &MainWindow::onAllClearButtonClicked);
     connect(ui->push_button_ce, &QPushButton::clicked, this, &MainWindow::onClearEntryButtonClicked);
     connect(ui->push_button_convert, &QPushButton::clicked, this, &MainWindow::onConvertButtonClicked);
+
+    connect(ui->input_base_slider, &QSlider::valueChanged, ui->input_base_spinbox, &QSpinBox::setValue);
+    connect(ui->input_base_spinbox, &QSpinBox::valueChanged, ui->input_base_slider, &QSlider::setValue);
+    connect(ui->output_base_slider, &QSlider::valueChanged, ui->output_base_spinbox, &QSpinBox::setValue);
+    connect(ui->output_base_spinbox, &QSpinBox::valueChanged, ui->output_base_slider, &QSlider::setValue);
 }
 
 auto MainWindow::onInputButtonClicked() noexcept -> void
@@ -79,8 +84,8 @@ auto MainWindow::onConvertButtonClicked() noexcept -> void
 {
     auto& input {ui->input_line};
     auto& output{ui->output_line};
-    auto  input_degree {ui->input_degree_spinbox->value()};
-    auto  output_degree{ui->output_degree_spinbox->value()};
+    auto  input_degree {ui->input_base_spinbox->value()};
+    auto  output_degree{ui->output_base_spinbox->value()};
 
     std::string result {};
     try
@@ -102,6 +107,25 @@ auto MainWindow::onConvertButtonClicked() noexcept -> void
         return;
     }
     output->setText(QString::fromStdString(result));
+}
+
+auto MainWindow::keyPressEvent(QKeyEvent *event) -> void
+{
+    auto& input {ui->input_line};
+    auto  key   {event->key()};
+
+    if (key == Qt::Key_Backspace)
+    {
+        onClearEntryButtonClicked();
+    }
+    else if (key == Qt::Key_Enter)
+    {
+        onConvertButtonClicked();
+    }
+    else
+    {
+        input->setText(input->text() + event->text());
+    }
 }
 
 } // namespace dvt

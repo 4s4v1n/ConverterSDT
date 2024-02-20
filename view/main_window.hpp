@@ -2,6 +2,7 @@
 #define MAIN_WINDOW_H
 
 #include <QErrorMessage>
+#include <QKeyEvent>
 #include <QMainWindow>
 
 #include "../controller/controller.hpp"
@@ -18,7 +19,6 @@ QT_END_NAMESPACE
 namespace dvt
 {
 
-// singleton
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,6 +27,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override = default;
+
+protected:
+    auto keyPressEvent(QKeyEvent* event) -> void override;
 
 private slots:
     auto onInputButtonClicked() noexcept -> void;
