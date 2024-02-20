@@ -80,7 +80,6 @@ auto Editor::accuracy(unsigned int n) -> void
             m_number[m_number.size() - 1] = static_cast<char>(last_number + 'A' - 10);
         }
     }
-
 }
 
 } // dvt

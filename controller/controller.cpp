@@ -23,4 +23,39 @@ auto Controller::validate(const std::string& value, int base) -> bool
     return ConverterP2Decimal::isValidExpression(value, base);
 }
 
+auto Controller::getNumber() const noexcept -> std::string
+{
+    return m_editor.getNumber();
+}
+
+auto Controller::addDigit(const char value) -> void
+{
+    m_editor.addDigit(value);
+}
+
+auto Controller::addZero() -> void
+{
+    m_editor.addZero();
+}
+
+auto Controller::addDelimiter() -> void
+{
+    m_editor.addDelimiter();
+}
+
+auto Controller::clear() -> void
+{
+    m_editor.clear();
+}
+
+auto Controller::bs() -> void
+{
+    m_editor.bs();
+}
+
+auto Controller::accuracy(unsigned int accuracy) -> void
+{
+    m_editor.accuracy(accuracy);
+}
+
 }
