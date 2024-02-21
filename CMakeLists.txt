@@ -2,42 +2,45 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Converter VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS
+        Core
+        Gui
+        Qml
+        Quick
+)
 
+qt_standard_project_setup()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
-set(PROJECT_SOURCES
-        main.cpp
-        view/main_window.cpp
-        view/main_window.hpp
-        view/main_window.ui
-        model/converter_decimal_to_p.cpp
-        model/converter_decimal_to_p.hpp
-        model/converter_p_to_decimal.cpp
-        model/converter_p_to_decimal.hpp
-        controller/controller.cpp
-        controller/controller.hpp
-        model/history.cpp
-        model/history.hpp
-        view/history_window.cpp
-        view/history_window.hpp
-        view/history_window.ui
+set(HDR_FILES
+    model/converter_decimal_to_p.hpp
+    model/converter_p_to_decimal.hpp
+    model/history.hpp
+    controller/controller.hpp
+)
+set(SRC_FILES
+    main.cpp
+    model/converter_decimal_to_p.cpp
+    model/converter_p_to_decimal.cpp
+    model/history.cpp
+    controller/controller.cpp
 )
 
-qt_add_executable(Converter
+qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${HDR_FILES}
+        ${SRC_FILES}
 )
 
-target_link_libraries(Converter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+qt_add_qml_module(${PROJECT_NAME}
+    URI Converter
+    VERSION 1.0
+    QML_FILES
+        view/main.qml
+)
 
-set_target_properties(Converter PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -46,12 +49,17 @@ set_target_properties(Converter PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS Converter
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(Converter)
-endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Qml
+        Qt6::Quick
+)
+
+#qt_finalize_executable(${PROJECT_NAME})

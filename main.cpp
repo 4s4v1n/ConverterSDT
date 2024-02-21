@@ -1,15 +1,24 @@
-#include "view/main_window.hpp"
-
-#include <QApplication>
+#include <QGuiApplication>
+#include <QCoreApplication>
+#include <QtQml/QQmlEngine>
+#include <QtQuick/QQuickView>
 
 auto main(int argc, char *argv[]) -> int
 {
-    QApplication                     app        {argc, argv};
-    MainWindow                       window     {};
-    std::shared_ptr<dvt::Controller> controller {new dvt::Controller};
+    QCoreApplication::setOrganizationName("NSTU");
+    QCoreApplication::setApplicationName("Converter");
 
-    window.setController(controller);
-    window.show();
+    QGuiApplication app  {argc, argv};
+    QQuickView      view {};
 
+    view.connect(view.engine(), &QQmlEngine::quit, &app, &QCoreApplication::quit);
+    view.setSource(QUrl{"qrc:Converter/view/main.qml"});
+
+    if (view.status() == QQuickView::Error)
+    {
+        return -1;
+    }
+
+    view.show();
     return app.exec();
 }
