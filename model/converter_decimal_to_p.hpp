@@ -9,6 +9,7 @@ namespace dvt
 
 class ConverterDecimal2P final
 {
+    // TODO internal exception class
 public:
     ConverterDecimal2P() = delete;
     ~ConverterDecimal2P() = delete;
