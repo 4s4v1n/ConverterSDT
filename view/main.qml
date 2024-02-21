@@ -1,39 +1,25 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
-Rectangle {
+import "components"
+
+Window {
+    id: window
     width: 600
     height: 800
+    flags: Qt.Window
+    visible: true
 
-    GridLayout {
-        id: buttons_grid
-        columns: 5
+    BottomPanel {
+        height: parent.height / 2
 
-        anchors.fill: parent
-
-        component TextButton : Button {
-            width: 100
-            height: 50
-        }
-
-        TextButton {
-            id: button_0
-        }
-        TextButton {
-            id: button_1
-        }
-        TextButton {
-            id: button_2
-        }
-        TextButton {
-            id: button_3
-        }
-        TextButton {
-            id: button__4
-        }
-        TextButton {
-            id: button__5
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            leftMargin: 10
+            rightMargin: 10
+            bottomMargin: 10
         }
     }
 }
