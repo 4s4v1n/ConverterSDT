@@ -2,10 +2,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Rectangle {
-
+Item {
     GridLayout {
-        id: buttons_grid_layout
+        id: grid_layout
         columns: 4
         rows: 5
         rowSpacing: 20

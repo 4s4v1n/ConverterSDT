@@ -39,6 +39,7 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES
         view/main.qml
         view/components/BottomPanel.qml
+        view/components/TopPanel.qml
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

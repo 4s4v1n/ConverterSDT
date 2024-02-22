@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "components"
 
@@ -10,16 +11,25 @@ Window {
     flags: Qt.Window
     visible: true
 
-    BottomPanel {
+    TopPanel {
+        id: top_panel
         height: parent.height / 2
 
         anchors {
-            bottom: parent.bottom
+            top: parent.top
             left: parent.left
             right: parent.right
-            leftMargin: 10
-            rightMargin: 10
-            bottomMargin: 10
+        }
+    }
+
+    BottomPanel {
+        id: bottom_panel
+        height: parent.height / 2
+
+        anchors {
+            top: top_panel.bottom
+            left: parent.left
+            right: parent.right
         }
     }
 }
