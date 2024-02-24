@@ -57,8 +57,8 @@ auto History::roleNames() const -> QHash<int, QByteArray>
 {
     static QHash<int, QByteArray> roles {QAbstractListModel::roleNames()};
 
-    roles[InputBaseRole]  = "input_base";
-    roles[OutputBaseRole] = "output_base";
+    roles[InputBaseRole]  = "m_input_base";
+    roles[OutputBaseRole] = "m_output_base";
     roles[InputRole]      = "input_role";
     roles[OutputRole]     = "output_role";
 

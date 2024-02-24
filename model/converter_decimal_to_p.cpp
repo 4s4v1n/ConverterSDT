@@ -1,7 +1,6 @@
 #include "converter_decimal_to_p.hpp"
 
 #include <cmath>
-#include <format>
 #include <limits>
 #include <list>
 #include <stdexcept>
@@ -12,7 +11,7 @@ auto ConverterDecimal2P::floatToP(double value, const int notation, const int ac
 {
     if (notation < 2 || notation > 16)
     {
-        throw std::invalid_argument{std::format("got invalid number notation {}", notation)};
+        throw std::invalid_argument{"got invalid number notation " + std::to_string(notation)};
     }
 
     auto integer_part{0.};
@@ -57,7 +56,7 @@ auto ConverterDecimal2P::intToP(int value, const int notation) -> std::string
 {
     if (notation < 2 || notation > 16)
     {
-        throw std::invalid_argument{std::format("got invalid number notation {}", notation)};
+        throw std::invalid_argument{"got invalid number notation " + std::to_string(notation)};
     }
 
     auto is_negative {false};
@@ -87,7 +86,7 @@ auto ConverterDecimal2P::intToChar(const int value) -> char
 {
     if (value < 0 || value > 16)
     {
-        throw std::invalid_argument{std::format("got invalid value {}", value)};
+        throw std::invalid_argument{"got invalid m_value " + std::to_string(value)};
     }
 
     if (value <= 9)

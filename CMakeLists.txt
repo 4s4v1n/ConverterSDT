@@ -17,6 +17,7 @@ set(HDR_FILES
     model/converter_decimal_to_p.hpp
     model/converter_p_to_decimal.hpp
     model/history.hpp
+    model/editor.hpp
     controller/controller.hpp
 )
 set(SRC_FILES
@@ -24,6 +25,7 @@ set(SRC_FILES
     model/converter_decimal_to_p.cpp
     model/converter_p_to_decimal.cpp
     model/history.cpp
+    model/editor.cpp
     controller/controller.cpp
 )
 

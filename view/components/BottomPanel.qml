@@ -11,11 +11,17 @@ Item {
         columnSpacing: 10
         anchors.fill: parent
 
-        component TextButton : Button {
+        component BaseButton : Button {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width / parent.columns
             Layout.preferredHeight: parent.height / parent.rows
+        }
+
+        component TextButton : BaseButton {
+            onClicked: {
+                Controller.addSymbol(this.text)
+            }
         }
 
         TextButton {

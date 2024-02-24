@@ -1,10 +1,18 @@
 #include "controller.hpp"
 
+#include <iostream>
+
 #include "../model/converter_p_to_decimal.hpp"
 #include "../model/converter_decimal_to_p.hpp"
 
 namespace dvt
 {
+
+auto Controller::getInstance() -> Controller*
+{
+    static Controller instance {};
+    return &instance;
+}
 
 auto Controller::convert(const std::string& value, const int input_base, const int output_base) -> std::string
 {
@@ -26,14 +34,55 @@ auto Controller::convert(const std::string& value, const int input_base, const i
     return output;
 }
 
-auto Controller::validate(const std::string& value, int base) -> bool
-{
-    return ConverterP2Decimal::isValidExpression(value, base);
-}
-
 auto Controller::history() const noexcept -> const History&
 {
     return m_history;
+}
+
+auto Controller::setInputBase(const int base) noexcept -> void
+{
+    try
+    {
+        m_editor.setInputBase(base);
+    }
+    catch (const std::invalid_argument& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+}
+
+auto Controller::setOutputBase(const int base) noexcept -> void
+{
+    try
+    {
+        m_editor.setOutputBase(base);
+    }
+    catch (const std::invalid_argument& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+}
+
+auto Controller::addSymbol(const QString& text) noexcept -> void
+{
+    try
+    {
+        m_editor.addSymbol(text.front().toLatin1());
+    }
+    catch (const std::invalid_argument& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+}
+
+auto Controller::clearEntry() noexcept -> void
+{
+    m_editor.clearEntry();
+}
+
+auto Controller::clearAll() noexcept -> void
+{
+    m_editor.clearAll();
 }
 
 }

@@ -1,7 +1,10 @@
 #include <QGuiApplication>
 #include <QCoreApplication>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
 #include <QtQuick/QQuickView>
+
+#include "controller/controller.hpp"
 
 auto main(int argc, char *argv[]) -> int
 {
@@ -10,6 +13,8 @@ auto main(int argc, char *argv[]) -> int
 
     QGuiApplication::setOrganizationName("NSTU");
     QGuiApplication::setApplicationName("Converter");
+
+    engine.rootContext()->setContextProperty("Controller", dvt::Controller::getInstance());
 
     const QUrl url{u"qrc:Converter/view/main.qml"_qs};
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,

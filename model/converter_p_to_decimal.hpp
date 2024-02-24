@@ -17,12 +17,12 @@ public:
     static auto pToFloat(const std::string& value, int p) -> double;
     static auto pToInt(const std::string& value, int p) -> int;
     static auto evaluatePrecision(const std::string& value) -> int;
-    static auto isValidExpression(const std::string& value, int base) -> bool;
+    // static auto isValidExpression(const std::string& value, int base) -> bool;
 
 private:
     static auto charToInt(char symbol) -> int;
-    static auto evaluateFloatRegex(int base) -> std::regex;
-    static auto evaluateIntRegex(int base) -> std::regex;
+    // static auto evaluateFloatRegex(int base) -> std::regex;
+    // static auto evaluateIntRegex(int base) -> std::regex;
     static auto evaluateLetters(int base) -> std::pair<char, char>;
 };
 
