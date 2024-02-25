@@ -14,7 +14,8 @@ auto main(int argc, char *argv[]) -> int
     QGuiApplication::setOrganizationName("NSTU");
     QGuiApplication::setApplicationName("Converter");
 
-    engine.rootContext()->setContextProperty("Controller", dvt::Controller::getInstance());
+    engine.rootContext()->setContextProperty("Controller",   dvt::Controller::getInstance());
+    engine.rootContext()->setContextProperty("HistoryModel", dvt::History::getInstance());
 
     const QUrl url{u"qrc:Converter/view/main.qml"_qs};
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,

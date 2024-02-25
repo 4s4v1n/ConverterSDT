@@ -20,6 +20,7 @@ public:
     auto setOutputBase(int base) -> void;
     auto getInputBase() const noexcept -> int;
     auto getOutputBase() const noexcept -> int;
+    auto getValue() const noexcept -> std::string;
     auto addSymbol(char symbol) -> void;
     auto clearEntry() noexcept -> void;
     auto clearAll() noexcept -> void;

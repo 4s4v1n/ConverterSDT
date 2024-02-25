@@ -1,8 +1,19 @@
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "../conversion.js" as Conversion
+
 Item {
+    property string inputValue
+    property int    inputBase
+
+    signal textButtonClicked(string text)
+    signal clearEntryButtonClicked()
+    signal clearAllButtonClicked()
+    signal convertButtonClicked()
+
     GridLayout {
         id: grid_layout
         columns: 4
@@ -19,9 +30,16 @@ Item {
         }
 
         component TextButton : BaseButton {
-            onClicked: {
-                Controller.addSymbol(this.text)
+            enabled: Conversion.hexCharacterToDecimal(this.text) < inputBase &&
+                     inputValue !== "0"
+
+            onClicked: () => {
+                textButtonClicked(this.text)
             }
+        }
+
+        component ActionButton : BaseButton {
+            enabled: inputValue !== ""
         }
 
         TextButton {
@@ -107,21 +125,34 @@ Item {
         TextButton {
             id: button_dot
             text: "."
+            enabled: inputValue !== "" && inputValue.indexOf(".") === -1
         }
 
-        TextButton {
+        ActionButton {
             id: button_ac
             text: "AC"
+
+            onClicked: () => {
+                clearAllButtonClicked()
+            }
         }
 
-        TextButton {
+        ActionButton {
             id: button_ce
             text: "CE"
+
+            onClicked: () => {
+                clearEntryButtonClicked()
+            }
         }
 
-        TextButton {
+        ActionButton {
             id: button_convert
             text: "CONVERT"
+
+            onClicked: () => {
+                convertButtonClicked()
+            }
         }
     }
 }

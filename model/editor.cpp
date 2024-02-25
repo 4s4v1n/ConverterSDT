@@ -16,7 +16,7 @@ Editor::Editor():
                         '8', '9', 'A', 'B',
                         'C', 'D', 'E', 'F',
                         'a', 'b', 'c', 'd',
-                        'e', 'f'}
+                        'e', 'f', '.', '-'}
 {}
 
 auto Editor::setInputBase(const int base) -> void
@@ -52,6 +52,11 @@ auto Editor::getInputBase() const noexcept -> int
 auto Editor::getOutputBase() const noexcept -> int
 {
     return m_output_base;
+}
+
+auto Editor::getValue() const noexcept -> std::string
+{
+    return m_value;
 }
 
 auto Editor::addSymbol(const char symbol) -> void

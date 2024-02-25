@@ -1,7 +1,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <string>
+#include <memory>
 
 #include "../model/editor.hpp"
 #include "../model/history.hpp"
@@ -15,26 +15,22 @@ class Controller final : public QObject
     Q_DISABLE_COPY_MOVE(Controller);
 
 public:
-    Q_INVOKABLE void setInputBase(int base) noexcept;
-    Q_INVOKABLE void setOutputBase(int base) noexcept;
-    Q_INVOKABLE void addSymbol(const QString& text) noexcept;
-    Q_INVOKABLE void clearEntry() noexcept;
-    Q_INVOKABLE void clearAll() noexcept;
-
-public:
-    Controller() = default;
-    ~Controller() override = default;
+    Q_INVOKABLE void    setInputBase(int base) noexcept;
+    Q_INVOKABLE void    setOutputBase(int base) noexcept;
+    Q_INVOKABLE void    addSymbol(const QString& text) noexcept;
+    Q_INVOKABLE void    clearEntry() noexcept;
+    Q_INVOKABLE void    clearAll() noexcept;
+    Q_INVOKABLE QString convert() noexcept;
 
 public:
     static auto getInstance() -> Controller*;
 
-public:
-    auto convert(const std::string& value, int input_base, int output_base) -> std::string;
-    auto history() const noexcept -> const History&;
+private:
+    Controller() = default;
+    ~Controller() override = default;
 
 private:
-    Editor  m_editor  {};
-    History m_history {};
+    Editor m_editor {};
 };
 
 } // namespace dvt

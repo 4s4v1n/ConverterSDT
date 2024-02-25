@@ -14,29 +14,26 @@ auto Controller::getInstance() -> Controller*
     return &instance;
 }
 
-auto Controller::convert(const std::string& value, const int input_base, const int output_base) -> std::string
+auto Controller::convert() noexcept -> QString
 {
     std::string output {};
 
+    auto value {m_editor.getValue()};
     if (value.find('.') != std::string::npos)
     {
-        auto input {ConverterP2Decimal::pToFloat(value, input_base)};
-        output = ConverterDecimal2P::floatToP(input, output_base,
+        auto input {ConverterP2Decimal::pToFloat(value, m_editor.getInputBase())};
+        output = ConverterDecimal2P::floatToP(input, m_editor.getOutputBase(),
                                               ConverterP2Decimal::evaluatePrecision(value));
     }
     else
     {
-        auto input {ConverterP2Decimal::pToInt(value, input_base)};
-        output = ConverterDecimal2P::intToP(input, output_base);
+        auto input {ConverterP2Decimal::pToInt(value, m_editor.getInputBase())};
+        output = ConverterDecimal2P::intToP(input, m_editor.getOutputBase());
     }
-    m_history.add(History::Record{input_base, output_base, value, output});
+    History::getInstance()->add(History::Record{m_editor.getInputBase(),
+                                                m_editor.getOutputBase(), value, output});
 
-    return output;
-}
-
-auto Controller::history() const noexcept -> const History&
-{
-    return m_history;
+    return QString::fromStdString(output);
 }
 
 auto Controller::setInputBase(const int base) noexcept -> void

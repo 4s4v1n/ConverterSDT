@@ -3,14 +3,28 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Item {
-    property alias outputValue: output_panel.value
     property alias inputValue: input_panel.value
+    property alias outputValue: output_panel.value
+    property alias inputBase: input_panel.baseSpinbox.value
+
+    signal outputBaseValueChanged()
+
+    component BaseText : Text {
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignHCenter
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width / parent.columns
+        Layout.preferredHeight: parent.height / parent.rows
+    }
 
     component NumberControlPanel : Rectangle {
         property alias valueLabelText: value_label.text
         property alias baseLabelText: base_label.text
         property alias baseSpinbox: spinbox
         property alias value: number_line.text
+
 
         GridLayout {
             id: grid_layout
@@ -20,31 +34,16 @@ Item {
             columnSpacing: 10
             anchors.fill: parent
 
-            Text {
+            BaseText {
                 id: value_label
-
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: parent.width / parent.columns
-                Layout.preferredHeight: parent.height / parent.rows
             }
 
-            TextInput {
+            BaseText {
                 id: number_line
-
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: parent.width / parent.columns
-                Layout.preferredHeight: parent.height / parent.rows
             }
 
-            Text {
+            BaseText {
                 id: base_label
-
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredWidth: parent.width / parent.columns
-                Layout.preferredHeight: parent.height / parent.rows
             }
 
             SpinBox {
@@ -57,13 +56,31 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredWidth: parent.width / parent.columns
                 Layout.preferredHeight: parent.height / parent.rows
+
+                onValueChanged: {
+                    slider.value = value
+                }
+            }
+
+            Slider {
+                id: slider
+                from: 2
+                to: 16
+                stepSize: 1
+                snapMode: Slider.SnapAlways
+
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                onValueChanged: {
+                    spinbox.value = value
+                }
             }
         }
     }
 
     NumberControlPanel {
         id: input_panel
-
         height: parent.height / 2
         valueLabelText: qsTr("Переводимое число")
         baseLabelText: qsTr("Основание переводимого числа")
@@ -86,7 +103,6 @@ Item {
 
     NumberControlPanel {
         id: output_panel
-
         height: parent.height / 2
         valueLabelText: qsTr("Переводённое число")
         baseLabelText: qsTr("Основание переведённого числа")
@@ -94,6 +110,7 @@ Item {
         baseSpinbox {
             onValueChanged: {
                 Controller.setOutputBase(baseSpinbox.value)
+                outputBaseValueChanged()
             }
             Component.onCompleted: {
                 Controller.setOutputBase(baseSpinbox.value)

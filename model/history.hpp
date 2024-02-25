@@ -2,14 +2,13 @@
 #define HISTORY_HPP
 
 #include <string>
-#include <vector>
 
 #include <QAbstractListModel>
 #include <QList>
 
 namespace dvt {
 
-class History : public QAbstractListModel
+class History : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -31,24 +30,30 @@ public:
     enum RoleNames
     {
         InputBaseRole = Qt::UserRole + 1,
-        OutputBaseRole,
         InputRole,
+        OutputBaseRole,
         OutputRole
     };
 
 public:
-    explicit History(QObject* parent = nullptr);
+    static auto getInstance() noexcept -> History*;
 
 public:
-    auto rowCount(const QModelIndex& index) const -> int override;
-    auto data(const QModelIndex& index, int role) const -> QVariant override;
+    auto rowCount(const QModelIndex& index = QModelIndex{}) const -> int override;
+    auto columnCount(const QModelIndex& index = QModelIndex{}) const -> int override;
+    auto data(const QModelIndex& index, int role = Qt::DisplayRole) const -> QVariant override;
+    auto headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const -> QVariant override;
     auto roleNames() const -> QHash<int, QByteArray> override;
 
 public:
     auto add(const Record& record) noexcept -> void;
 
 private:
-    QList<Record> m_data {};
+    explicit History(QObject* parent = nullptr);
+
+private:
+    QStringList   m_column_names {};
+    QList<Record> m_data         {};
 };
 
 } // dvt

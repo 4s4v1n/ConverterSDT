@@ -42,6 +42,10 @@ qt_add_qml_module(${PROJECT_NAME}
         view/main.qml
         view/components/BottomPanel.qml
         view/components/TopPanel.qml
+        view/conversion.js
+        view/pages/MainPage.qml
+        view/pages/ReferencePage.qml
+        view/pages/HistoryPage.qml
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
